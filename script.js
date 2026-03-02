@@ -1,6 +1,5 @@
 const siteHeader = document.querySelector('.site-header');
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const isMobileViewport = window.matchMedia('(max-width: 768px)').matches;
 const isLowPowerDevice =
   (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) ||
   (navigator.deviceMemory && navigator.deviceMemory <= 4);
@@ -403,53 +402,6 @@ const initProcessAnimation = () => {
     processSection.classList.add('process-static');
     processWrap.style.setProperty('--progress', '100%');
     setDoneSteps(processSteps.length - 1);
-    return;
-  }
-
-  if (isMobileViewport) {
-    let currentStepIndex = -1;
-
-    processSteps.forEach((step) => {
-      step.classList.add('is-pending');
-    });
-
-    const setCurrentStep = (stepIndex) => {
-      const safeIndex = Math.max(0, Math.min(processSteps.length - 1, stepIndex));
-      if (safeIndex === currentStepIndex) return;
-
-      currentStepIndex = safeIndex;
-      setDoneSteps(currentStepIndex);
-
-      const progressWidth = ((currentStepIndex + 1) / processSteps.length) * 100;
-      processWrap.style.setProperty('--progress', `${progressWidth}%`);
-    };
-
-    const stepObserver = new IntersectionObserver(
-      (entries) => {
-        let nextIndex = currentStepIndex;
-
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-
-          const visibleIndex = processSteps.indexOf(entry.target);
-          if (visibleIndex === -1) return;
-
-          if (nextIndex === -1 || visibleIndex > nextIndex) {
-            nextIndex = visibleIndex;
-          }
-        });
-
-        if (nextIndex > -1) {
-          setCurrentStep(nextIndex);
-        }
-      },
-      {
-        threshold: 0.58,
-        rootMargin: '-22% 0px -40% 0px'
-      }
-    );
-
-    processSteps.forEach((step) => stepObserver.observe(step));
     return;
   }
 
