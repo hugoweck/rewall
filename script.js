@@ -1,9 +1,21 @@
 const siteHeader = document.querySelector('.site-header');
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const mobileViewportQuery = window.matchMedia('(max-width: 768px)');
+let isMobileViewport = mobileViewportQuery.matches;
 const isLowPowerDevice =
   (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) ||
   (navigator.deviceMemory && navigator.deviceMemory <= 4);
 const SCROLL_STORAGE_KEY = 'mc_scrollY';
+
+if (typeof mobileViewportQuery.addEventListener === 'function') {
+  mobileViewportQuery.addEventListener('change', (event) => {
+    isMobileViewport = event.matches;
+  });
+} else if (typeof mobileViewportQuery.addListener === 'function') {
+  mobileViewportQuery.addListener((event) => {
+    isMobileViewport = event.matches;
+  });
+}
 
 if ('scrollRestoration' in history) {
   history.scrollRestoration = 'manual';
@@ -386,7 +398,8 @@ const initProcessAnimation = () => {
   const processSection = document.querySelector('#process');
   const processWrap = processSection?.querySelector('[data-process]');
   const processSteps = processSection ? [...processSection.querySelectorAll('[data-step]')] : [];
-  const disableProcessAnimation = prefersReducedMotion || isLowPowerDevice;
+  const isDesktopViewport = window.matchMedia('(min-width: 769px)').matches;
+  const disableProcessAnimation = prefersReducedMotion || (isDesktopViewport && isLowPowerDevice);
 
   if (!processSection || !processWrap || !processSteps.length) return;
 
@@ -402,6 +415,51 @@ const initProcessAnimation = () => {
     processSection.classList.add('process-static');
     processWrap.style.setProperty('--progress', '100%');
     setDoneSteps(processSteps.length - 1);
+    return;
+  }
+
+  if (isMobileViewport) {
+    processSection.classList.add('process-mobile-animated');
+
+    let currentStepIndex = -1;
+    let maxObservedStepIndex = -1;
+
+    processWrap.style.setProperty('--progress', '0%');
+    setDoneSteps(-1);
+
+    const applyStepProgress = (stepIndex) => {
+      const boundedIndex = Math.max(-1, Math.min(processSteps.length - 1, stepIndex));
+      if (boundedIndex === currentStepIndex) return;
+
+      currentStepIndex = boundedIndex;
+      const progressWidth = ((boundedIndex + 1) / processSteps.length) * 100;
+      processWrap.style.setProperty('--progress', `${progressWidth}%`);
+      setDoneSteps(boundedIndex);
+    };
+
+    const mobileStepObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const stepIndex = processSteps.indexOf(entry.target);
+          if (stepIndex < 0 || !entry.isIntersecting) return;
+
+          if (stepIndex > maxObservedStepIndex) {
+            maxObservedStepIndex = stepIndex;
+          }
+
+          applyStepProgress(maxObservedStepIndex);
+        });
+      },
+      {
+        threshold: 0.68,
+        rootMargin: '0px 0px -14% 0px'
+      }
+    );
+
+    processSteps.forEach((step) => {
+      mobileStepObserver.observe(step);
+    });
+
     return;
   }
 
