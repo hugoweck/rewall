@@ -5,6 +5,9 @@
   --text-muted: #5e5e5e;
   --line: #d9d9d5;
   --accent: #ffffff;
+  --accent-green: #2f9e44;
+  --accent-green-dark: #237a34;
+  --accent-green-soft: #e8f5eb;
   --max-width: 1180px;
   --header-height: 104px;
 }
@@ -256,21 +259,24 @@ h2 {
 }
 
 .btn-primary {
-  background: #fff;
-  color: #111;
+  background: var(--accent-green);
+  color: #fff;
+  border-color: var(--accent-green);
 }
 
 .btn-primary:hover {
-  background: #e8e8e8;
+  background: var(--accent-green-dark);
+  border-color: var(--accent-green-dark);
 }
 
 .btn-secondary {
   color: #fff;
-  background: transparent;
+  background: color-mix(in srgb, var(--accent-green) 70%, transparent);
+  border-color: var(--accent-green);
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: color-mix(in srgb, var(--accent-green-dark) 72%, transparent);
 }
 
 .section {
@@ -467,8 +473,8 @@ h2 {
   width: 0.85rem;
   height: 0.85rem;
   border-radius: 50%;
-  border: 1px solid rgba(0, 0, 0, 0.34);
-  background: transparent;
+  border: 1px solid var(--accent-green);
+  background: var(--accent-green-soft);
   transition: background-color 220ms ease, border-color 220ms ease;
 }
 
@@ -486,9 +492,9 @@ h2 {
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0;
-  color: rgba(17, 17, 17, 0.55);
-  border: 1px solid rgba(0, 0, 0, 0.36);
-  background: transparent;
+  color: var(--accent-green);
+  border: 1px solid var(--accent-green);
+  background: var(--accent-green-soft);
   transition: color 220ms ease, border-color 220ms ease, background-color 220ms ease;
 }
 
@@ -512,14 +518,14 @@ h2 {
 }
 
 .step.is-done .step-dot {
-  background: rgba(0, 0, 0, 0.9);
-  border-color: rgba(0, 0, 0, 0.9);
+  background: var(--accent-green);
+  border-color: var(--accent-green);
 }
 
 .step.is-done .step-num {
   color: #fff;
-  background: rgba(0, 0, 0, 0.92);
-  border-color: rgba(0, 0, 0, 0.92);
+  background: var(--accent-green);
+  border-color: var(--accent-green);
 }
 
 
@@ -536,14 +542,14 @@ h2 {
 }
 
 .process.process-static .step-dot {
-  background: rgba(0, 0, 0, 0.9);
-  border-color: rgba(0, 0, 0, 0.9);
+  background: var(--accent-green);
+  border-color: var(--accent-green);
 }
 
 .process.process-static .step-num {
   color: #fff;
-  background: rgba(0, 0, 0, 0.92);
-  border-color: rgba(0, 0, 0, 0.92);
+  background: var(--accent-green);
+  border-color: var(--accent-green);
 }
 
 .project-grid {
@@ -756,9 +762,9 @@ h2 {
 }
 
 #contactForm .btn-primary {
-  background: #111;
+  background: var(--accent-green);
   color: #fff;
-  border: 1px solid #111;
+  border: 1px solid var(--accent-green);
   border-radius: 12px;
   min-height: 48px;
   padding: 0.7rem 1.05rem;
@@ -769,7 +775,7 @@ h2 {
 }
 
 #contactForm .btn-primary:hover:not(:disabled) {
-  background: #2a2a2a;
+  background: var(--accent-green-dark);
 }
 
 #contactForm .btn-primary:disabled {
