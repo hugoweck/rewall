@@ -132,6 +132,10 @@ a {
   opacity: 0.78;
 }
 
+.mobile-nav-dropdown {
+  display: none;
+}
+
 .nav-cta {
   border: 1px solid rgba(255, 255, 255, 0.55);
   border-radius: 999px;
@@ -1008,15 +1012,28 @@ h2 {
     height: auto;
   }
 
-  .nav-list {
-    gap: 0.85rem;
-    flex-wrap: wrap;
-    justify-content: flex-start;
+  nav {
+    margin-left: auto;
   }
 
-  .nav-list a {
-    font-size: 0.75rem;
-    letter-spacing: 0.12em;
+  .nav-list {
+    display: none;
+  }
+
+  .mobile-nav-dropdown {
+    display: block;
+  }
+
+  .mobile-nav-dropdown select {
+    appearance: none;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 999px;
+    padding: 0.45rem 2rem 0.45rem 0.85rem;
+    background: rgba(10, 10, 10, 0.45);
+    color: #fff;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
 
   .hero {

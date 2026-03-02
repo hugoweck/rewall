@@ -1,5 +1,6 @@
 const siteHeader = document.querySelector('.site-header');
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const isMobileViewport = window.matchMedia('(max-width: 720px)').matches;
 const isLowPowerDevice =
   (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) ||
   (navigator.deviceMemory && navigator.deviceMemory <= 4);
@@ -128,6 +129,49 @@ document.addEventListener('DOMContentLoaded', () => {
     event.preventDefault();
     history.pushState({ hash: targetUrl.hash }, '', targetUrl.hash);
   });
+
+  const initMobileHeaderDropdown = () => {
+    if (!isMobileViewport) return;
+
+    document.querySelectorAll('.site-header nav').forEach((nav) => {
+      const navList = nav.querySelector('.nav-list');
+      if (!navList || nav.querySelector('.mobile-nav-dropdown')) return;
+
+      const links = [...navList.querySelectorAll('a[href]')];
+      if (!links.length) return;
+
+      const dropdown = document.createElement('label');
+      dropdown.className = 'mobile-nav-dropdown';
+
+      const select = document.createElement('select');
+      select.setAttribute('aria-label', 'Välj kategori');
+
+      const placeholder = document.createElement('option');
+      placeholder.value = '';
+      placeholder.textContent = 'Välj kategori';
+      placeholder.selected = true;
+      placeholder.disabled = true;
+      select.appendChild(placeholder);
+
+      links.forEach((link) => {
+        const option = document.createElement('option');
+        option.value = link.href;
+        option.textContent = link.textContent?.trim() || 'Kategori';
+        select.appendChild(option);
+      });
+
+      select.addEventListener('change', (event) => {
+        const nextUrl = event.target.value;
+        if (!nextUrl) return;
+        window.location.assign(nextUrl);
+      });
+
+      dropdown.appendChild(select);
+      nav.appendChild(dropdown);
+    });
+  };
+
+  initMobileHeaderDropdown();
 });
 
 window.addEventListener('popstate', () => {
@@ -178,7 +222,9 @@ const revealObserver = new IntersectionObserver(
       }
     });
   },
-  { threshold: 0.18 }
+  isMobileViewport
+    ? { threshold: 0, rootMargin: '-45% 0px -45% 0px' }
+    : { threshold: 0.18 }
 );
 
 document.querySelectorAll('.reveal').forEach((section) => revealObserver.observe(section));
@@ -240,8 +286,8 @@ const initServiceCardAnimation = () => {
       });
     },
     {
-      threshold: mobile ? 0.25 : 0.45,
-      rootMargin: mobile ? '0px 0px -18% 0px' : '0px 0px -22% 0px'
+      threshold: mobile ? 0 : 0.45,
+      rootMargin: mobile ? '-45% 0px -45% 0px' : '0px 0px -22% 0px'
     }
   );
 
@@ -363,6 +409,7 @@ const initProcessAnimation = () => {
   }
 
   const activationRange = 0.7;
+  const viewportAnchor = isMobileViewport ? window.innerHeight * 0.5 : window.innerHeight;
   const widthUpdateThreshold = 0.5;
   let ticking = false;
   let isInView = false;
@@ -379,8 +426,8 @@ const initProcessAnimation = () => {
     if (!isInView) return;
 
     const sectionRect = processSection.getBoundingClientRect();
-    const scrollRange = sectionRect.height + window.innerHeight;
-    const rawProgress = (window.innerHeight - sectionRect.top) / scrollRange;
+    const scrollRange = sectionRect.height + viewportAnchor;
+    const rawProgress = (viewportAnchor - sectionRect.top) / scrollRange;
     const clampedProgress = Math.max(0, Math.min(1, rawProgress));
     const effectiveProgress = Math.max(0, Math.min(1, clampedProgress / activationRange));
     const progressWidth = effectiveProgress * 100;
@@ -419,7 +466,7 @@ const initProcessAnimation = () => {
     },
     {
       threshold: 0,
-      rootMargin: '15% 0px 15% 0px'
+      rootMargin: isMobileViewport ? '-45% 0px -45% 0px' : '15% 0px 15% 0px'
     }
   );
 
