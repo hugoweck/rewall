@@ -493,7 +493,7 @@ const initContactForm = () => {
 
     const formData = new FormData(form);
     const templateParams = {
-      to_email: 'info@mceffektivbygg.se',
+      to_email: 'info@rewall.se',
       name: formData.get('name'),
       email: formData.get('email'),
       phone: formData.get('phone'),
@@ -506,7 +506,7 @@ const initContactForm = () => {
       formStatus.textContent = 'Tack! Vi återkommer inom 24h.';
       form.reset();
     } catch (error) {
-      formStatus.textContent = 'Något gick fel. Testa igen eller kontakta oss på 070-912 31 63.';
+      formStatus.textContent = 'Något gick fel. Testa igen eller kontakta oss på 070 - 970 63 54.';
     } finally {
       submitButton.disabled = false;
       submitButton.textContent = 'Skicka förfrågan';
