@@ -115,7 +115,7 @@ a {
   margin: 0;
   padding: 0;
   list-style: none;
-  display: flex;
+  display: none;
   gap: 1.6rem;
   color: #fff;
   align-items: center;
@@ -133,7 +133,19 @@ a {
 }
 
 .mobile-nav-dropdown {
-  display: none;
+  display: block;
+}
+
+.mobile-nav-dropdown select {
+  appearance: none;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 999px;
+  padding: 0.45rem 2rem 0.45rem 0.85rem;
+  background: rgba(10, 10, 10, 0.45);
+  color: #fff;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .nav-cta {
@@ -1014,26 +1026,6 @@ h2 {
 
   nav {
     margin-left: auto;
-  }
-
-  .nav-list {
-    display: none;
-  }
-
-  .mobile-nav-dropdown {
-    display: block;
-  }
-
-  .mobile-nav-dropdown select {
-    appearance: none;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    border-radius: 999px;
-    padding: 0.45rem 2rem 0.45rem 0.85rem;
-    background: rgba(10, 10, 10, 0.45);
-    color: #fff;
-    font-size: 0.72rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
   }
 
   .hero {

@@ -1,6 +1,5 @@
 const siteHeader = document.querySelector('.site-header');
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const isMobileViewport = window.matchMedia('(max-width: 720px)').matches;
 const isLowPowerDevice =
   (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) ||
   (navigator.deviceMemory && navigator.deviceMemory <= 4);
@@ -130,9 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
     history.pushState({ hash: targetUrl.hash }, '', targetUrl.hash);
   });
 
-  const initMobileHeaderDropdown = () => {
-    if (!isMobileViewport) return;
-
+  const initHeaderDropdown = () => {
     document.querySelectorAll('.site-header nav').forEach((nav) => {
       const navList = nav.querySelector('.nav-list');
       if (!navList || nav.querySelector('.mobile-nav-dropdown')) return;
@@ -144,11 +141,11 @@ document.addEventListener('DOMContentLoaded', () => {
       dropdown.className = 'mobile-nav-dropdown';
 
       const select = document.createElement('select');
-      select.setAttribute('aria-label', 'Välj kategori');
+      select.setAttribute('aria-label', 'Välj menyalternativ');
 
       const placeholder = document.createElement('option');
       placeholder.value = '';
-      placeholder.textContent = 'Välj kategori';
+      placeholder.textContent = 'Meny';
       placeholder.selected = true;
       placeholder.disabled = true;
       select.appendChild(placeholder);
@@ -171,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  initMobileHeaderDropdown();
+  initHeaderDropdown();
 });
 
 window.addEventListener('popstate', () => {
